@@ -69,19 +69,7 @@ for (let i = 0; i < 26; i++) {
   snow.append(f);
 }
 
-// ---- Candlelight bokeh (cover + closing) ----
-// ponytail: plain spans, a few dozen per box; swap for a photo once the generated hall images arrive
-document.querySelectorAll('.lights').forEach((box) => {
-  for (let i = 0; i < +box.dataset.n; i++) {
-    const s = document.createElement('span');
-    const size = 10 + Math.random() ** 2 * 70;
-    s.style.cssText = `left:${Math.random() * 100}%;top:${8 + Math.random() * 84}%;width:${size}px;height:${size}px;`
-      + `animation-duration:${2 + Math.random() * 3}s;animation-delay:${-Math.random() * 5}s`;
-    box.append(s);
-  }
-});
-
-// ---- Opening: the frost melts, the lights drift closer ----
+// ---- Opening: the frost melts, the view glides into the tunnel ----
 const gate = $('#gate');
 const audio = $('#audio');
 const musicBtn = $('#music');

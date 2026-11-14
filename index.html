@@ -22,8 +22,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Forum&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="assets/cover.webp">
 <link rel="preload" as="image" href="assets/hero.webp">
-<link rel="stylesheet" href="style.css?v=2"><!-- bump ?v= on every change so phones skip their cached copy -->
+<link rel="stylesheet" href="style.css?v=3"><!-- bump ?v= on every change so phones skip their cached copy -->
 
 <script>
 // ===== EDIT ONLY THIS BLOCK =====
@@ -46,10 +47,13 @@ const CONFIG = {
 </head>
 <body class="locked">
 
-<!-- ===== Cover: a frosted window; the frost melts and warm candlelight shows through ===== -->
+<!-- ===== Cover: a frosted window; the frost melts and the candlelit blossom tunnel shows through ===== -->
 <div class="gate" id="gate">
-  <div class="lights gate-room" data-n="46" aria-hidden="true"></div>
-  <div class="frost" aria-hidden="true"></div>
+  <img class="gate-room" src="assets/cover.webp" alt="">
+  <div class="frost" aria-hidden="true">
+    <img class="branch branch-l" src="assets/branch-l.webp" alt="">
+    <img class="branch branch-r" src="assets/branch-r.webp" alt="">
+  </div>
   <div class="cover">
     <p class="cover-kicker">Зимняя симфония</p>
     <h1 class="cover-names"><span data-c="groom"></span><i>&amp;</i><span data-c="bride"></span></h1>
@@ -119,9 +123,9 @@ const CONFIG = {
     </figure>
   </div>
 
-  <!-- Closing: candlelight -->
+  <!-- Closing: the candlelit hall -->
   <section class="closing">
-    <div class="lights closing-room" data-n="36" aria-hidden="true"></div>
+    <img class="closing-room" src="assets/hall.webp" alt="" loading="lazy">
     <p class="closing-kicker">Зимняя симфония</p>
     <p class="closing-names"><span data-c="groom"></span><i>&amp;</i><span data-c="bride"></span></p>
     <p class="closing-tag">Сказка двух культур</p>
@@ -173,6 +177,6 @@ const CONFIG = {
 </button>
 <audio id="audio" loop preload="none"></audio>
 
-<script src="script.js?v=2"></script>
+<script src="script.js?v=3"></script>
 </body>
 </html>

@@ -27,12 +27,15 @@ body.locked { overflow: hidden; height: 100svh; }
 img { display: block; max-width: 100%; }
 
 /* ===== Cover: frosted window ===== */
-/* Layers, back to front: candlelight (CSS bokeh) → frost (blur + grain) → text.
-   On tap the frost melts from the centre out, the lights drift closer, then the gate fades into the hero. */
+/* Layers, back to front: candlelit blossom tunnel → frost (blur + grain + branches) → text.
+   On tap the frost melts from the centre out, the view glides into the tunnel, then the gate fades into the hero. */
 @property --melt { syntax: '<percentage>'; inherits: false; initial-value: -25%; }
 .gate { position: fixed; inset: 0; z-index: 50; overflow: hidden; background: var(--ivory); transition: opacity 1.1s 2.1s; }
 .gate.open { opacity: 0; }
-.gate-room { transform: scale(1.06); transition: transform 3.4s cubic-bezier(.5, 0, .2, 1); }
+.gate-room {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 45%;
+  transform: scale(1.06); transition: transform 3.4s cubic-bezier(.5, 0, .2, 1);
+}
 .open .gate-room { transform: scale(1.45); }
 .frost {
   position: absolute; inset: 0; isolation: isolate;
@@ -46,17 +49,14 @@ img { display: block; max-width: 100%; }
   transition: --melt 2.2s cubic-bezier(.55, 0, .35, 1) .25s;
 }
 .open .frost { --melt: 130%; }
-/* Candlelight: soft out-of-focus lights on a warm champagne-to-umber glow (spans added by script.js) */
-.lights {
-  position: absolute; inset: 0; overflow: hidden;
-  background: radial-gradient(120% 70% at 50% 62%, #e9d5b2, #b48f63 38%, #5a4330 72%, #2e231a);
+/* Branches are on pure white, so multiply drops the white and keeps the branches on the frost.
+   object-fit: cover on a narrow box keeps only the outer (branch) side of each image. */
+.branch {
+  position: absolute; top: 0; height: 100%; width: min(38vw, 280px); object-fit: cover;
+  mix-blend-mode: multiply; opacity: .9; pointer-events: none;
 }
-.lights span {
-  position: absolute; border-radius: 50%; translate: -50% -50%;
-  background: radial-gradient(circle, rgba(255, 246, 225, .95), rgba(255, 220, 160, .45) 42%, transparent 70%);
-  animation: twinkle ease-in-out infinite alternate;
-}
-@keyframes twinkle { from { opacity: .35; scale: .85; } to { opacity: 1; scale: 1.05; } }
+.branch-l { left: 0; object-position: 0 50%; -webkit-mask: linear-gradient(90deg, #000 45%, transparent); mask: linear-gradient(90deg, #000 45%, transparent); }
+.branch-r { right: 0; object-position: 100% 50%; -webkit-mask: linear-gradient(270deg, #000 45%, transparent); mask: linear-gradient(270deg, #000 45%, transparent); }
 
 .cover {
   position: absolute; inset: 0; z-index: 2;
@@ -215,16 +215,19 @@ section { text-align: center; }
 .date, .venue, .greeting { opacity: 0; transform: translateY(24px); transition: opacity 1s, transform 1.2s var(--ease); }
 .date.in, .venue.in, .greeting.in { opacity: 1; transform: none; }
 
-/* ===== Closing: candlelight ===== */
+/* ===== Closing: the candlelit hall ===== */
 .closing {
   position: relative; overflow: hidden; padding: 26svh 24px 22svh; color: var(--ivory); background: #2b231d;
   display: grid; justify-items: center; gap: 14px;
 }
-.closing-room { transform: scale(1.15); transition: transform 6s var(--ease); }
+.closing-room {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 50%;
+  transform: scale(1.15); transition: transform 6s var(--ease);
+}
 .closing.in .closing-room { transform: none; }
-.closing::before {   /* warm shade so the text stays readable over the lights */
+.closing::before {   /* warm shade so the text stays readable over the bright hall */
   content: ''; position: absolute; inset: 0; z-index: 1;
-  background: radial-gradient(80% 50% at 50% 50%, rgba(43, 35, 29, .5), rgba(43, 35, 29, .1) 80%),
+  background: radial-gradient(80% 50% at 50% 50%, rgba(43, 35, 29, .7), rgba(43, 35, 29, .25) 80%),
     linear-gradient(var(--ivory), transparent 14%, transparent 86%, var(--cream));
 }
 .closing > :not(.closing-room) { position: relative; z-index: 2; }
