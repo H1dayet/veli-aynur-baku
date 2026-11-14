@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f4efe8">
+<title>Вели &amp; Айнур · Свадебное приглашение</title>
+<meta name="description" content="19 декабря 2026, 18:00 · JW Marriott Absheron, зал «Şərq». Приглашаем вас разделить с нами этот счастливый день.">
+<!-- Link preview (WhatsApp, Telegram, iMessage…). Image URL must be absolute. -->
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:title" content="Вели &amp; Айнур · Свадебное приглашение">
+<meta property="og:description" content="19 декабря 2026, 18:00 · JW Marriott Absheron, зал «Şərq». Приглашаем вас разделить с нами этот счастливый день.">
+<meta property="og:url" content="https://huselabs.az/veli-aynur-baku/">
+<meta property="og:image" content="https://huselabs.az/veli-aynur-baku/assets/og.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Вели &amp; Айнур · 19.12.2026 · JW Marriott Absheron">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text x='16' y='24' font-size='24' text-anchor='middle' fill='%23a08a6c'>✦</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Forum&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="assets/hero.webp">
+<link rel="stylesheet" href="style.css?v=2"><!-- bump ?v= on every change so phones skip their cached copy -->
+
+<script>
+// ===== EDIT ONLY THIS BLOCK =====
+const CONFIG = {
+  groom: 'Вели',
+  bride: 'Айнур',
+  date: '2026-12-19T18:00:00+04:00',   // ISO, with Baku's offset
+  timeZone: 'Asia/Baku',
+  greeting: 'С огромной радостью приглашаем вас разделить с нами самый счастливый день — день, когда начинается наша семья.',
+  events: [
+    { title: 'Свадебное торжество', time: '18:00', place: 'JW Marriott Absheron', address: 'Азадлыг, 674 · зал «Şərq», 3-й этаж' },
+  ],
+  program: [],                          // [{ time: '18:00', title: 'Сбор гостей' }, …]; empty hides the section
+  mapQuery: 'JW Marriott Absheron Baku',  // Google Maps search text; '' hides the map
+  closing: 'Ваше присутствие — самый ценный подарок для нас. С нетерпением ждём встречи с вами в этот зимний вечер!',
+  rsvpUrl: 'https://huselabs.az/veli-aynur-baku/api/rsvp',   // where answers are saved (Cloudflare Worker + D1)
+  music: 'assets/music.mp3',            // '' for no music
+};
+</script>
+</head>
+<body class="locked">
+
+<!-- ===== Cover: a frosted window; the frost melts and warm candlelight shows through ===== -->
+<div class="gate" id="gate">
+  <div class="lights gate-room" data-n="46" aria-hidden="true"></div>
+  <div class="frost" aria-hidden="true"></div>
+  <div class="cover">
+    <p class="cover-kicker">Зимняя симфония</p>
+    <h1 class="cover-names"><span data-c="groom"></span><i>&amp;</i><span data-c="bride"></span></h1>
+    <p class="cover-date" data-c="dateDots"></p>
+    <p class="cover-venue">JW Marriott<br>Absheron</p>
+    <p class="cover-to"><strong>Дорогой гость</strong>приглашаем вас на нашу свадьбу</p>
+    <button class="btn" id="open">Открыть приглашение</button>
+    <p class="cover-tag">Сказка двух культур</p>
+  </div>
+</div>
+
+<div class="snow" aria-hidden="true"></div>
+
+<main>
+  <!-- Hero: the couple -->
+  <section class="hero">
+    <img class="hero-img" src="assets/hero.webp" alt="Айнур оборачивается, держа Вели за руку">
+    <div class="hero-text">
+      <p class="kicker">Свадебное торжество</p>
+      <h2 class="names"><span data-c="groom"></span><span class="amp">&amp;</span><span data-c="bride"></span></h2>
+      <p class="hero-date" data-c="dateLong"></p>
+    </div>
+    <span class="scroll-line" aria-hidden="true"></span>
+  </section>
+
+  <div class="paper">
+    <section class="greeting">
+      <p class="star" aria-hidden="true">✦</p>
+      <p class="verse" id="verse" data-c="greeting"></p>
+    </section>
+
+    <figure class="frame tilt-l">
+      <img src="assets/photo-1.webp" alt="Вели и Айнур держатся за руки на набережной Босфора" loading="lazy" width="900" height="1350">
+      <figcaption>Вместе — навсегда</figcaption>
+    </figure>
+
+    <section class="date">
+      <h2 class="title">Сохраните дату</h2>
+      <div class="cal">
+        <p class="cal-head" data-c="monthYear"></p>
+        <div class="cal-grid" id="cal"></div>
+      </div>
+      <div class="timer" id="timer" aria-live="off">
+        <div><b id="d">0</b><span>дней</span></div>
+        <div><b id="h">00</b><span>часов</span></div>
+        <div><b id="m">00</b><span>минут</span></div>
+        <div><b id="s">00</b><span>секунд</span></div>
+      </div>
+    </section>
+
+    <section class="venue">
+      <h2 class="title">Где и когда</h2>
+      <p class="v-day" data-c="dateLong"></p>
+      <div id="events"></div>
+      <div class="map"><iframe id="map" title="Карта места проведения" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>
+      <a class="btn" id="directions" target="_blank" rel="noopener">Построить маршрут</a>
+    </section>
+
+    <section class="program">
+      <h2 class="title">Программа вечера</h2>
+      <ol class="timeline" id="program"></ol>
+    </section>
+
+    <figure class="frame tilt-r">
+      <img src="assets/photo-2.webp" alt="Вели и Айнур на набережной у мечети Ортакёй" loading="lazy" width="900" height="1350">
+      <figcaption>До встречи на нашем празднике</figcaption>
+    </figure>
+  </div>
+
+  <!-- Closing: candlelight -->
+  <section class="closing">
+    <div class="lights closing-room" data-n="36" aria-hidden="true"></div>
+    <p class="closing-kicker">Зимняя симфония</p>
+    <p class="closing-names"><span data-c="groom"></span><i>&amp;</i><span data-c="bride"></span></p>
+    <p class="closing-tag">Сказка двух культур</p>
+    <p class="closing-note" data-c="closing"></p>
+  </section>
+
+  <!-- RSVP: the last thing on the page; the floating button keeps nudging until it's answered -->
+  <section class="rsvp" id="rsvp">
+    <h2 class="title">Подтвердите присутствие</h2>
+    <p class="rsvp-lead">Пожалуйста, ответьте на пару вопросов — это займёт меньше минуты и очень поможет нам всё подготовить.</p>
+    <form id="rsvpForm" novalidate>
+      <label class="field">
+        <span>Ваше имя и фамилия</span>
+        <input name="name" maxlength="80" autocomplete="name" required>
+      </label>
+      <fieldset class="choice">
+        <legend>Вы сможете прийти?</legend>
+        <label><input type="radio" name="attending" value="yes" required><span>Да, с радостью</span></label>
+        <label><input type="radio" name="attending" value="no"><span>К сожалению, не смогу</span></label>
+      </fieldset>
+      <div class="if-yes" hidden>
+        <label class="field">
+          <span>Сколько гостей, включая вас?</span>
+          <select name="guests">
+            <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
+            <option>6</option><option>7</option><option>8</option><option>9</option><option>10</option>
+          </select>
+        </label>
+        <label class="field">
+          <span>Комментарий <em>(необязательно)</em></span>
+          <textarea name="comment" maxlength="500" rows="3" placeholder="Пожелания или вопросы"></textarea>
+        </label>
+      </div>
+      <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <button class="btn dark" type="submit">Отправить ответ</button>
+      <p class="rsvp-msg" role="status" aria-live="polite"></p>
+    </form>
+    <div class="rsvp-done" hidden>
+      <p class="rsvp-thanks"></p>
+      <button class="rsvp-edit" type="button" id="rsvpEdit">Изменить ответ</button>
+    </div>
+  </section>
+  <footer><span data-c="initials"></span> · <span data-c="dateDots"></span></footer>
+</main>
+
+<a class="rsvp-nudge" id="rsvpNudge" href="#rsvp" hidden>Подтвердить присутствие</a>
+<button class="music" id="music" aria-label="Выключить музыку" hidden>
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V5l11-2v13M9 18a3 3 0 1 1-3-3 3 3 0 0 1 3 3Zm11-2a3 3 0 1 1-3-3 3 3 0 0 1 3 3Z"/></svg>
+</button>
+<audio id="audio" loop preload="none"></audio>
+
+<script src="script.js?v=2"></script>
+</body>
+</html>

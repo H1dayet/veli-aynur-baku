@@ -1,0 +1,13 @@
+// Worker for huselabs.az/veli-aynur-baku/ (static invitation + RSVP + admin). Deploy: sh cloudflare/deploy.sh
+// The route is more specific than the first invitation's huselabs.az/veli-aynur*, so Cloudflare sends /veli-aynur-baku here.
+{
+  "name": "veli-aynur-baku",
+  "main": "worker.js",
+  "compatibility_date": "2026-11-13",
+  "assets": { "directory": "./site", "binding": "ASSETS", "html_handling": "auto-trailing-slash" },
+  "routes": [{ "pattern": "huselabs.az/veli-aynur-baku*", "zone_name": "huselabs.az" }],
+  "workers_dev": false,
+  "d1_databases": [
+    { "binding": "DB", "database_name": "veli-aynur-baku-rsvp", "database_id": "87ec5985-d0f3-4c49-a0a9-5c2a9fc96278" }
+  ]
+}
