@@ -148,13 +148,13 @@ img { display: block; max-width: 100%; }
 /* text over the photo: a soft ivory halo behind the block, a glow on the letters, deeper colours */
 .hero-text::before {
   content: ''; position: absolute; inset: -14% -6%; z-index: -1; pointer-events: none;
-  background: radial-gradient(closest-side, rgba(250, 247, 242, .62), rgba(250, 247, 242, .3) 60%, transparent);
+  background: radial-gradient(closest-side, rgba(250, 247, 242, .7), rgba(250, 247, 242, .35) 60%, transparent);
 }
-.hero-text, .scroll-hint { text-shadow: 0 0 10px rgba(255, 253, 249, .95), 0 0 24px rgba(255, 253, 249, .8); }
-.hero-text .names { color: var(--taupe-deep); }
-.hero-text .kicker { color: #7d6547; font-weight: 600; }
-.hero-text .hero-date { color: var(--taupe-deep); }
-.scroll-hint { color: var(--taupe) !important; }
+/* no glow on the letters (it read as a white highlight); the soft halo above does the work */
+.hero-text .names { color: #3f362f; }
+.hero-text .kicker { color: #5a4630; font-size: .88rem; }
+.hero-text .hero-date { color: #3f362f; }
+.scroll-hint { color: var(--taupe-deep) !important; }
 .hero-date { margin-top: 12px; font-style: italic; font-size: 1.15rem; color: var(--taupe); }
 .scroll-hint {
   position: absolute; left: 0; right: 0; bottom: calc(6svh + 10px); z-index: 3; text-align: center;
