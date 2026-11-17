@@ -25,7 +25,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Forum&display=swap" rel="stylesheet">
 <link rel="preload" as="image" href="assets/cover.webp">
 <link rel="preload" as="image" href="assets/hero.webp">
-<link rel="stylesheet" href="style.css?v=5"><!-- bump ?v= on every change so phones skip their cached copy -->
+<link rel="stylesheet" href="style.css?v=6"><!-- bump ?v= on every change so phones skip their cached copy -->
 
 <script>
 // ===== EDIT ONLY THIS BLOCK =====
@@ -43,6 +43,9 @@ const CONFIG = {
       pageTitle: 'Vəli & Aynur · Toy dəvətnaməsi',
       heroKicker: 'Toy dəvətnaməsi',
       scroll: 'Aşağı sürüşdürün',
+      coverHello: 'Əziz qonaq',
+      coverInvite: 'sizi toyumuzda görməyə şad olarıq',
+      coverOpen: 'Dəvətnaməni aç',
       greeting: 'Qış axşamı, şam işığı və musiqinin müşayiəti ilə ailəmizin hekayəsi başlayır. Bu xoşbəxt anı sizinlə bölüşmək istəyirik.',
       caption1: 'Hekayəmizin başlanğıcı',
       dateTitle: 'Tarixi qeyd edin',
@@ -86,6 +89,9 @@ const CONFIG = {
       pageTitle: 'Вели & Айнур · Свадебное приглашение',
       heroKicker: 'Приглашение на свадьбу',
       scroll: 'Пролистайте вниз',
+      coverHello: 'Дорогой гость',
+      coverInvite: 'будем рады видеть вас на нашей свадьбе',
+      coverOpen: 'Открыть приглашение',
       greeting: 'Зимний вечер, огни свечей и музыка — так начнётся история нашей семьи. Нам очень хочется разделить этот момент с вами.',
       caption1: 'Начало нашей истории',
       dateTitle: 'Отметьте в календаре',
@@ -131,7 +137,17 @@ const CONFIG = {
 </head>
 <body class="locked">
 
-<!-- ===== Cover: a frosted window and the language choice; the frost melts and the candlelit blossom tunnel shows through ===== -->
+<!-- ===== Step 1: language choice (its own simple screen) ===== -->
+<div class="lang-screen" id="langScreen">
+  <p class="star" aria-hidden="true">✦</p>
+  <p class="ls-title"><span lang="az">Dili seçin</span><span lang="ru">Выберите язык</span></p>
+  <div class="langs">
+    <button class="btn" data-lang="az" lang="az">Azərbaycanca</button>
+    <button class="btn" data-lang="ru" lang="ru">Русский</button>
+  </div>
+</div>
+
+<!-- ===== Step 2, cover: a frosted window; the frost melts and the candlelit blossom tunnel shows through ===== -->
 <div class="gate" id="gate">
   <img class="gate-room" src="assets/cover.webp" alt="">
   <div class="frost" aria-hidden="true">
@@ -139,15 +155,13 @@ const CONFIG = {
     <img class="branch branch-r" src="assets/branch-r.webp" alt="">
   </div>
   <div class="cover">
-    <p class="cover-kicker"><span lang="az">Qış simfoniyası</span><span lang="ru">Зимняя симфония</span></p>
-    <h1 class="cover-names" lang="az"><span>Vəli</span><i>&amp;</i><span>Aynur</span></h1>
-    <p class="cover-date" id="coverDate"></p>
+    <p class="cover-kicker" data-t="closingKicker"></p>
+    <h1 class="cover-names"><span data-t="groom"></span><i>&amp;</i><span data-t="bride"></span></h1>
+    <p class="cover-date" data-t="dateDots"></p>
     <p class="cover-venue" lang="en">JW Marriott<br>Absheron</p>
-    <p class="cover-to"><span lang="az">Dili seçin</span> · <span lang="ru">Выберите язык</span></p>
-    <div class="langs">
-      <button class="btn" data-lang="az" lang="az">Azərbaycanca</button>
-      <button class="btn" data-lang="ru" lang="ru">Русский</button>
-    </div>
+    <p class="cover-to"><strong data-t="coverHello"></strong><span data-t="coverInvite"></span></p>
+    <button class="btn" id="open" data-t="coverOpen"></button>
+    <p class="cover-tag" data-t="closingTag"></p>
   </div>
 </div>
 
@@ -264,6 +278,6 @@ const CONFIG = {
 </button>
 <audio id="audio" preload="none"></audio>
 
-<script src="script.js?v=5"></script>
+<script src="script.js?v=6"></script>
 </body>
 </html>

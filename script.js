@@ -34,7 +34,6 @@ const L = {
 
 let lang = 'az';
 let T = C.text.az;
-$('#coverDate').textContent = dateDots;
 
 // ---- Falling snow ----
 // ponytail: 26 CSS-animated spans; canvas only if you want hundreds
@@ -139,13 +138,21 @@ function apply(chosen) {
   if (prev) showDone(prev);
 }
 
-// ---- Opening: pick a language, the frost melts, the view glides into the tunnel ----
+// ---- Step 1: language screen; the choice fills the cover and the whole invitation ----
+const langScreen = $('#langScreen');
+document.querySelectorAll('[data-lang]').forEach((b) => b.addEventListener('click', () => {
+  if (langScreen.classList.contains('gone')) return;
+  apply(b.dataset.lang);
+  langScreen.classList.add('gone');
+  setTimeout(() => langScreen.remove(), 900);
+}));
+
+// ---- Step 2, opening: the frost melts, the view glides into the tunnel ----
 const gate = $('#gate');
 const audio = $('#audio');
 const musicBtn = $('#music');
-function openInvite(chosen) {
+function openInvite() {
   if (gate.classList.contains('open')) return;
-  apply(chosen);
   gate.classList.add('open');
   document.body.classList.add('revealing');
   window.scrollTo(0, 0);
@@ -162,7 +169,7 @@ function openInvite(chosen) {
     audio.play().catch(() => {});
   }
 }
-document.querySelectorAll('[data-lang]').forEach((b) => b.addEventListener('click', () => openInvite(b.dataset.lang)));
+$('#open').addEventListener('click', openInvite);
 // loop back to musicStart, not to 0:00
 audio.addEventListener('ended', () => { audio.currentTime = C.musicStart || 0; audio.play().catch(() => {}); });
 musicBtn.addEventListener('click', () => (audio.paused ? audio.play() : audio.pause()));

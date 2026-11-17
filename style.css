@@ -91,11 +91,24 @@ img { display: block; max-width: 100%; }
 .cover-date { font: 1.3rem var(--display); letter-spacing: .26em; padding-left: .26em; }
 .cover-venue { font: .95rem/1.5 var(--display); letter-spacing: .22em; text-transform: uppercase; padding-left: .22em; }
 .cover-to { max-width: 300px; margin-top: 2svh; font-style: italic; }
-.cover-kicker span { display: block; }
-.cover-kicker span + span { margin-top: 4px; }
+.cover-to strong { display: block; font-style: normal; font-weight: 600; font-size: 1.3rem; }
+.cover-tag { margin-top: 2svh; font-size: .72rem; }
 .cover .cover-names, .cover .cover-kicker { color: var(--taupe-deep); }
-.langs { display: grid; gap: 10px; width: min(100%, 260px); margin-top: 4px; }
-.langs .btn { margin: 0; text-shadow: none; background: rgba(255, 255, 255, .72); }
+.cover .btn { text-shadow: none; background: rgba(255, 255, 255, .72); }
+
+/* ===== Language screen (before the cover) ===== */
+.lang-screen {
+  position: fixed; inset: 0; z-index: 54;   /* above the cover, under the falling snow */
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px; padding: 24px;
+  background: var(--grain) 0 0 / 220px, radial-gradient(80% 60% at 50% 45%, #fbf8f3, var(--ivory) 60%, var(--cream));
+  text-align: center; transition: opacity .8s, visibility 0s .8s;
+}
+.lang-screen.gone { opacity: 0; visibility: hidden; }
+.lang-screen .star { margin: 0; }
+.ls-title { font: 1.05rem/1.9 var(--display); letter-spacing: .3em; padding-left: .3em; text-transform: uppercase; color: var(--taupe); }
+.ls-title span { display: block; }
+.langs { display: grid; gap: 12px; width: min(100%, 260px); }
+.langs .btn { margin: 0; }
 
 .btn {
   display: inline-block; margin-top: 8px; padding: 13px 28px;
@@ -122,32 +135,35 @@ img { display: block; max-width: 100%; }
 /* ===== Hero ===== */
 .hero { position: relative; height: 100svh; min-height: 560px; overflow: hidden; background: var(--ivory); }
 .hero-img {
-  position: absolute; inset: 0 0 auto; width: 100%; height: 76%;
-  object-fit: cover; object-position: 50% 40%; transform-origin: 50% 30%;
+  /* the whole couple stays visible: the photo sits above the names (no white over it), trimming sky first on short screens */
+  position: absolute; inset: 0 0 auto; width: 100%; height: min(150vw, calc(100svh - 290px));
+  object-fit: cover; object-position: 50% 100%; transform-origin: 50% 60%;
+  -webkit-mask: linear-gradient(#000 93%, transparent); mask: linear-gradient(#000 93%, transparent);
   transform: scale(1.12); transition: transform 3.2s var(--ease);
 }
 .hero::after {
   content: ''; position: absolute; inset: 0; z-index: 1;
-  background: linear-gradient(rgba(246, 242, 236, .35), transparent 16%, transparent 46%, rgba(246, 242, 236, .85) 62%, var(--ivory) 75%);
+  background: linear-gradient(rgba(246, 242, 236, .25), transparent 12%);   /* only a faint veil at the very top */
+  pointer-events: none;
 }
 .revealing .hero-img, body:not(.locked) .hero-img { transform: none; }
 .hero-text {
-  position: absolute; inset: auto 0 12svh; z-index: 3; text-align: center;
+  position: absolute; inset: auto 0 calc(5svh + 44px); z-index: 3; text-align: center;
   opacity: 0; transform: translateY(24px); transition: opacity 1.4s 1.2s, transform 1.6s var(--ease) 1.2s;
 }
 .revealing .hero-text, body:not(.locked) .hero-text { opacity: 1; transform: none; }
-.kicker { margin-bottom: 16px; }
-.names { font-size: clamp(2.8rem, 13vw, 4.8rem); }
+.kicker { margin-bottom: 12px; }
+.names { font-size: clamp(2.5rem, 11.5vw, 4.4rem); }
 .hero-date { margin-top: 12px; font-style: italic; font-size: 1.15rem; color: var(--taupe); }
 .scroll-hint {
-  position: absolute; left: 0; right: 0; bottom: calc(6svh + 10px); z-index: 3; text-align: center;
+  position: absolute; left: 0; right: 0; bottom: calc(4svh + 10px); z-index: 3; text-align: center;
   font: .72rem var(--display); letter-spacing: .3em; padding-left: .3em; text-transform: uppercase; color: var(--muted);
   opacity: 0; transition: opacity 1.2s 2.4s;
 }
 .revealing .scroll-hint, body:not(.locked) .scroll-hint { opacity: 1; animation: bob 2.2s ease-in-out 3.6s infinite; }
 @keyframes bob { 50% { transform: translateY(4px); } }
 .scroll-line {
-  position: absolute; left: 50%; bottom: 0; z-index: 3; width: 1px; height: 6svh;
+  position: absolute; left: 50%; bottom: 0; z-index: 3; width: 1px; height: 4svh;
   background: linear-gradient(transparent, var(--champagne));
   animation: drip 2.2s ease-in-out infinite;
 }
