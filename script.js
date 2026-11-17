@@ -5,52 +5,36 @@ const rm = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const start = new Date(C.date);
 const [y, mo, dd] = new Intl.DateTimeFormat('en-CA', { timeZone: C.timeZone, year: 'numeric', month: '2-digit', day: '2-digit' })
   .format(start).split('-').map(Number);
-// ponytail: Russian names hardcoded, so output never depends on the browser's Intl data
-const MONTHS_GEN = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
-const MONTHS = ['январь', 'февраль', 'март', 'апрель', 'май', 'июнь', 'июль', 'август', 'сентябрь', 'октябрь', 'ноябрь', 'декабрь'];
-const WEEKDAYS = ['воскресенье', 'понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота'];
-const weekday = WEEKDAYS[new Date(Date.UTC(y, mo - 1, dd)).getUTCDay()];
+const dow = new Date(Date.UTC(y, mo - 1, dd)).getUTCDay();
+const dateDots = `${pad(dd)} · ${pad(mo)} · ${y}`;
 const cap = (s) => s[0].toUpperCase() + s.slice(1);
 
-// ---- Fill text from CONFIG (textContent only, never innerHTML with user data) ----
-const text = {
-  ...C,
-  g0: C.groom[0],
-  b0: C.bride[0],
-  couple: `${C.groom} & ${C.bride}`,
-  initials: `${C.groom[0]}&${C.bride[0]}`,
-  dateDots: `${pad(dd)} · ${pad(mo)} · ${y}`,
-  dateLong: `${cap(weekday)}, ${dd} ${MONTHS_GEN[mo - 1]} ${y}`,
-  monthYear: `${MONTHS[mo - 1]} ${y}`,
+// ponytail: month/weekday names hardcoded per language, so output never depends on the browser's Intl data
+const ruPlural = new Intl.PluralRules('ru');
+const RU_FORM = { one: 0, few: 1, many: 2, other: 2 };
+const RU_UNITS = { d: ['день', 'дня', 'дней'], h: ['час', 'часа', 'часов'], m: ['минута', 'минуты', 'минут'], s: ['секунда', 'секунды', 'секунд'] };
+const L = {
+  ru: {
+    weekdays: ['воскресенье', 'понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота'],
+    wd: ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'],
+    month: ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'],
+    monthNom: ['январь', 'февраль', 'март', 'апрель', 'май', 'июнь', 'июль', 'август', 'сентябрь', 'октябрь', 'ноябрь', 'декабрь'],
+    long: (w, d, m, yr) => `${cap(w)}, ${d} ${m} ${yr}`,
+    unit: (k, v) => RU_UNITS[k][RU_FORM[ruPlural.select(+v)]],
+  },
+  az: {
+    weekdays: ['bazar', 'bazar ertəsi', 'çərşənbə axşamı', 'çərşənbə', 'cümə axşamı', 'cümə', 'şənbə'],
+    wd: ['B.e.', 'Ç.a.', 'Ç.', 'C.a.', 'C.', 'Ş.', 'B.'],
+    month: ['yanvar', 'fevral', 'mart', 'aprel', 'may', 'iyun', 'iyul', 'avqust', 'sentyabr', 'oktyabr', 'noyabr', 'dekabr'],
+    get monthNom() { return this.month; },
+    long: (w, d, m, yr) => `${d} ${m} ${yr}, ${w}`,
+    unit: (k) => ({ d: 'gün', h: 'saat', m: 'dəqiqə', s: 'saniyə' })[k],   // Azerbaijani nouns don't change after numbers
+  },
 };
-document.querySelectorAll('[data-c]').forEach((el) => {
-  const v = text[el.dataset.c];
-  if (v) el.textContent = v; else el.remove();
-});
 
-// ---- Evening program ----
-const programEl = $('#program');
-(C.program || []).forEach((item) => {
-  const li = document.createElement('li');
-  const time = document.createElement('time');
-  time.textContent = item.time;
-  const title = document.createElement('span');
-  title.textContent = item.title;
-  li.append(time, title);
-  programEl.append(li);
-});
-if (!programEl.children.length) programEl.closest('section').remove();
-
-
-// Greeting: one span per word so each can light up as it scrolls in
-const verse = $('#verse');
-if (verse) verse.replaceChildren(...verse.textContent.split(' ').flatMap((w, i) => {
-  const s = document.createElement('span');
-  s.className = 'w';
-  s.style.setProperty('--i', i);
-  s.textContent = w;
-  return [s, ' '];
-}));
+let lang = 'az';
+let T = C.text.az;
+$('#coverDate').textContent = dateDots;
 
 // ---- Falling snow ----
 // ponytail: 26 CSS-animated spans; canvas only if you want hundreds
@@ -69,12 +53,99 @@ for (let i = 0; i < 26; i++) {
   snow.append(f);
 }
 
-// ---- Opening: the frost melts, the view glides into the tunnel ----
+// ---- Fill the invitation in the chosen language (textContent only, never innerHTML with user data) ----
+function apply(chosen) {
+  lang = chosen;
+  T = C.text[lang];
+  const l = L[lang];
+  const [groom, bride] = C.names[lang];
+  document.documentElement.lang = lang;
+  document.title = T.pageTitle;
+  const vals = {
+    ...T, groom, bride,
+    initials: `${groom[0]}&${bride[0]}`,
+    dateDots,
+    dateLong: l.long(l.weekdays[dow], dd, l.month[mo - 1], y),
+    monthYear: `${l.monthNom[mo - 1]} ${y}`,
+  };
+  document.querySelectorAll('[data-t]').forEach((el) => { el.textContent = vals[el.dataset.t] ?? ''; });
+  document.querySelectorAll('[data-alt]').forEach((el) => { el.alt = vals[el.dataset.alt] ?? ''; });
+  document.querySelectorAll('[data-ph]').forEach((el) => { el.placeholder = vals[el.dataset.ph] ?? ''; });
+
+  // Greeting: one span per word so each can light up as it scrolls in
+  const verse = $('#verse');
+  verse.replaceChildren(...verse.textContent.split(' ').flatMap((w, i) => {
+    const s = document.createElement('span');
+    s.className = 'w';
+    s.style.setProperty('--i', i);
+    s.textContent = w;
+    return [s, ' '];
+  }));
+
+  // Evening program
+  const programEl = $('#program');
+  (T.program || []).forEach((item) => {
+    const li = document.createElement('li');
+    const time = document.createElement('time');
+    time.textContent = item.time;
+    const title = document.createElement('span');
+    title.textContent = item.title;
+    li.append(time, title);
+    programEl.append(li);
+    io.observe(li);
+  });
+  if (!programEl.children.length) programEl.closest('section').remove();
+
+  // Venue
+  const eventsEl = $('#events');
+  T.events.forEach((ev) => {
+    const box = document.createElement('div');
+    box.className = 'event';
+    for (const [cls, val] of [['e-title', ev.title], ['e-time', ev.time], ['e-place', ev.place], ['e-addr', ev.address]]) {
+      if (!val) continue;
+      const el = document.createElement('p');
+      el.className = cls;
+      el.textContent = val;
+      if (cls === 'e-place') el.lang = 'en';   // hotel name: keep MARRIOTT's plain I when uppercased in Azerbaijani
+      box.append(el);
+    }
+    eventsEl.append(box);
+  });
+  if (C.mapQuery) {
+    $('#map').title = T.mapTitle;
+    $('#map').src = `https://maps.google.com/maps?q=${encodeURIComponent(C.mapQuery)}&z=15&hl=${lang}&output=embed`;
+    $('#directions').href = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(C.mapQuery)}`;
+  } else {
+    $('.map').remove();
+    $('#directions').remove();
+  }
+
+  // Calendar (month of the wedding, Monday first)
+  const firstDow = (new Date(Date.UTC(y, mo - 1, 1)).getUTCDay() + 6) % 7;
+  const daysInMonth = new Date(Date.UTC(y, mo, 0)).getUTCDate();
+  const cells = l.wd.map((d) => `<span class="wd">${d}</span>`);
+  for (let i = 0; i < firstDow; i++) cells.push('<span></span>');
+  for (let d = 1; d <= daysInMonth; d++) {
+    cells.push(d === dd
+      ? `<span class="the-day">${d}<svg viewBox="0 0 60 60" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M44 9C33 2 12 6 7 24c-4 16 8 30 25 29 17-1 25-14 22-29-2-9-10-14-20-14"/></svg></span>`
+      : `<span>${d}</span>`);
+  }
+  $('#cal').innerHTML = cells.join('');
+
+  tick();
+  timer = setInterval(tick, 1000);
+
+  const prev = remembered();
+  if (prev) showDone(prev);
+}
+
+// ---- Opening: pick a language, the frost melts, the view glides into the tunnel ----
 const gate = $('#gate');
 const audio = $('#audio');
 const musicBtn = $('#music');
-function openInvite() {
+function openInvite(chosen) {
   if (gate.classList.contains('open')) return;
+  apply(chosen);
   gate.classList.add('open');
   document.body.classList.add('revealing');
   window.scrollTo(0, 0);
@@ -84,15 +155,19 @@ function openInvite() {
   }, rm ? 300 : 3300);
   if (C.music) {   // the tap is the user gesture browsers require for audio
     audio.src = C.music;
+    // jump to musicStart as soon as the length is known (needs a server that answers Range requests, as Cloudflare does)
+    audio.addEventListener('loadedmetadata', () => { audio.currentTime = C.musicStart || 0; }, { once: true });
     audio.volume = 0.7;
     musicBtn.hidden = false;
     audio.play().catch(() => {});
   }
 }
-$('#open').addEventListener('click', openInvite);
+document.querySelectorAll('[data-lang]').forEach((b) => b.addEventListener('click', () => openInvite(b.dataset.lang)));
+// loop back to musicStart, not to 0:00
+audio.addEventListener('ended', () => { audio.currentTime = C.musicStart || 0; audio.play().catch(() => {}); });
 musicBtn.addEventListener('click', () => (audio.paused ? audio.play() : audio.pause()));
-audio.addEventListener('play', () => { musicBtn.classList.add('playing'); musicBtn.ariaLabel = 'Выключить музыку'; });
-audio.addEventListener('pause', () => { musicBtn.classList.remove('playing'); musicBtn.ariaLabel = 'Включить музыку'; });
+audio.addEventListener('play', () => { musicBtn.classList.add('playing'); musicBtn.ariaLabel = T.musicOff; });
+audio.addEventListener('pause', () => { musicBtn.classList.remove('playing'); musicBtn.ariaLabel = T.musicOn; });
 
 // ---- Reveal on scroll ----
 const io = new IntersectionObserver((es) => es.filter((e) => e.isIntersecting).forEach((e, k) => {
@@ -100,70 +175,32 @@ const io = new IntersectionObserver((es) => es.filter((e) => e.isIntersecting).f
   e.target.classList.add('in');
   io.unobserve(e.target);
 }), { threshold: 0.25, rootMargin: '0px 0px -8% 0px' });
-document.querySelectorAll('.greeting, .frame, .date, .venue, .program, .timeline li, .closing').forEach((el) => io.observe(el));
-
-// ---- Calendar (month of the wedding, Monday first) ----
-const firstDow = (new Date(Date.UTC(y, mo - 1, 1)).getUTCDay() + 6) % 7;
-const daysInMonth = new Date(Date.UTC(y, mo, 0)).getUTCDate();
-const cells = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'].map((d) => `<span class="wd">${d}</span>`);
-for (let i = 0; i < firstDow; i++) cells.push('<span></span>');
-for (let d = 1; d <= daysInMonth; d++) {
-  cells.push(d === dd
-    ? `<span class="the-day">${d}<svg viewBox="0 0 60 60" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M44 9C33 2 12 6 7 24c-4 16 8 30 25 29 17-1 25-14 22-29-2-9-10-14-20-14"/></svg></span>`
-    : `<span>${d}</span>`);
-}
-$('#cal').innerHTML = cells.join('');
+document.querySelectorAll('.greeting, .frame, .date, .venue, .program, .closing').forEach((el) => io.observe(el));
 
 // ---- Countdown ----
-function setNum(id, v) {
+let timer;
+function set(id, v) {
   const el = $(id);
+  el.nextElementSibling.textContent = L[lang].unit(id[1], v);
   if (el.textContent === String(v)) return;
   el.textContent = v;
   if (!rm) el.animate([{ transform: 'translateY(-55%)', opacity: 0 }, { transform: 'none', opacity: 1 }],
     { duration: 600, easing: 'cubic-bezier(.16,1,.3,1)' });
 }
-// Russian plural labels: 1 день / 2 дня / 5 дней
-const plural = new Intl.PluralRules('ru');
-const WORDS = { d: ['день', 'дня', 'дней'], h: ['час', 'часа', 'часов'], m: ['минута', 'минуты', 'минут'], s: ['секунда', 'секунды', 'секунд'] };
-const FORM = { one: 0, few: 1, many: 2, other: 2 };
-function set(id, v) {
-  setNum(id, v);
-  $(id).nextElementSibling.textContent = WORDS[id[1]][FORM[plural.select(+v)]];
-}
 function tick() {
   const ms = start - Date.now();
   if (ms <= 0) {
-    $('#timer').outerHTML = '<p class="verse in" style="margin:0 auto">Мы уже семья! Спасибо, что разделили с нами нашу радость.</p>';
+    const p = document.createElement('p');
+    p.className = 'verse in';
+    p.style.margin = '0 auto';
+    p.textContent = T.married;
+    $('#timer').replaceWith(p);
     return clearInterval(timer);
   }
   set('#d', Math.floor(ms / 864e5));
   set('#h', pad(Math.floor(ms / 36e5) % 24));
   set('#m', pad(Math.floor(ms / 6e4) % 60));
   set('#s', pad(Math.floor(ms / 1e3) % 60));
-}
-const timer = setInterval(tick, 1000);
-tick();
-
-// ---- Venue ----
-const eventsEl = $('#events');
-C.events.forEach((ev) => {
-  const box = document.createElement('div');
-  box.className = 'event';
-  for (const [cls, val] of [['e-title', ev.title], ['e-time', ev.time], ['e-place', ev.place], ['e-addr', ev.address]]) {
-    if (!val) continue;
-    const el = document.createElement('p');
-    el.className = cls;
-    el.textContent = val;
-    box.append(el);
-  }
-  eventsEl.append(box);
-});
-if (C.mapQuery) {
-  $('#map').src = `https://maps.google.com/maps?q=${encodeURIComponent(C.mapQuery)}&z=15&output=embed`;
-  $('#directions').href = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(C.mapQuery)}`;
-} else {
-  $('.map').remove();
-  $('#directions').remove();
 }
 
 // ---- RSVP ----
@@ -176,9 +213,7 @@ const STORE = 'rsvp-veli-aynur-baku';
 const remembered = () => { try { return JSON.parse(localStorage.getItem(STORE)); } catch { return null; } };
 
 function showDone(r) {
-  $('.rsvp-thanks').textContent = r.attending === 'yes'
-    ? `Спасибо, ${r.name}! Ваш ответ получен — ждём вас ${dd} ${MONTHS_GEN[mo - 1]}.`
-    : `Спасибо, ${r.name}, что сообщили. Нам будет вас не хватать!`;
+  $('.rsvp-thanks').textContent = (r.attending === 'yes' ? T.thanksYes : T.thanksNo).replace('{name}', r.name);
   form.hidden = true;
   done.hidden = false;
   updateNudge();
@@ -192,11 +227,11 @@ form.addEventListener('submit', async (e) => {
   e.preventDefault();
   const data = new FormData(form);
   const name = String(data.get('name') || '').trim();
-  if (!name) { msg.textContent = 'Пожалуйста, укажите ваше имя.'; form.elements.name.focus(); return; }
-  if (!data.get('attending')) { msg.textContent = 'Пожалуйста, выберите, сможете ли вы прийти.'; return; }
+  if (!name) { msg.textContent = T.errName; form.elements.name.focus(); return; }
+  if (!data.get('attending')) { msg.textContent = T.errChoice; return; }
   const btn = form.querySelector('button[type=submit]');
   btn.disabled = true;
-  btn.textContent = 'Отправляем…';
+  btn.textContent = T.fSending;
   msg.textContent = '';
   try {
     // urlencoded body = "simple" request, so the GitHub Pages copy can post here without a CORS preflight
@@ -206,10 +241,10 @@ form.addEventListener('submit', async (e) => {
     try { localStorage.setItem(STORE, JSON.stringify(r)); } catch {}
     showDone(r);
   } catch {
-    msg.textContent = 'Не удалось отправить. Проверьте интернет и попробуйте ещё раз.';
+    msg.textContent = T.errNet;
   } finally {
     btn.disabled = false;
-    btn.textContent = 'Отправить ответ';
+    btn.textContent = T.fSubmit;
   }
 });
 
@@ -226,6 +261,3 @@ function updateNudge() {
 }
 new IntersectionObserver(([e]) => { rsvpInView = e.isIntersecting; updateNudge(); }).observe($('#rsvp'));
 addEventListener('scroll', updateNudge, { passive: true });
-
-const prev = remembered();
-if (prev) showDone(prev);

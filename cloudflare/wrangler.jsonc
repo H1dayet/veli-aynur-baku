@@ -4,7 +4,8 @@
   "name": "veli-aynur-baku",
   "main": "worker.js",
   "compatibility_date": "2026-11-13",
-  "assets": { "directory": "./site", "binding": "ASSETS", "html_handling": "auto-trailing-slash" },
+  // run_worker_first: static assets skip the Worker by default, but the music needs byte ranges (see worker.js)
+  "assets": { "directory": "./site", "binding": "ASSETS", "html_handling": "auto-trailing-slash", "run_worker_first": ["/veli-aynur-baku/assets/music.mp3"] },
   "routes": [{ "pattern": "huselabs.az/veli-aynur-baku*", "zone_name": "huselabs.az" }],
   "workers_dev": false,
   "d1_databases": [

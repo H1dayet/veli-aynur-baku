@@ -3,6 +3,7 @@
 //   GET  /veli-aynur-baku/<ADMIN_PATH>      → admin page (ADMIN_PATH is a Worker secret, so the link isn't in this public repo)
 //   GET  /veli-aynur-baku/<ADMIN_PATH>.csv  → same data as CSV for Excel / Google Sheets
 //   POST /veli-aynur-baku/<ADMIN_PATH>/delete (id=…) → deletes one answer, back to the admin page
+//   GET  …/*.mp3 with a Range header         → 206 partial content, so browsers can seek (music starts at 1:29)
 // Everything else is a static file from ./site.
 const PREFIX = '/veli-aynur-baku';
 const CORS = { 'access-control-allow-origin': '*' };   // the GitHub Pages copy posts here too
@@ -36,9 +37,33 @@ export default {
         : new Response(adminPage(results, `${admin}.csv`, `${admin}/delete`), { headers: { ...headers, 'content-type': 'text/html; charset=utf-8' } });
     }
 
+    if (pathname.endsWith('.mp3')) return ranged(request, env);
     return env.ASSETS.fetch(request);
   },
 };
+
+// Static assets answer Range requests with the whole file (200), so the player can't jump ahead and
+// iPhone Safari may refuse the audio. Slice the file here and reply 206.
+// ponytail: reads the whole 10 MB file per request; fine for one song on an invitation
+async function ranged(request, env) {
+  const res = await env.ASSETS.fetch(request.url);   // plain GET, no Range / conditional headers
+  const m = /^bytes=(\d*)-(\d*)$/.exec(request.headers.get('range') || '');
+  if (!res.ok || !m || (m[1] === '' && m[2] === '')) {
+    const full = new Response(res.body, res);
+    full.headers.set('accept-ranges', 'bytes');
+    return full;
+  }
+  const buf = await res.arrayBuffer();
+  const size = buf.byteLength;
+  const start = m[1] === '' ? Math.max(size - Number(m[2]), 0) : Number(m[1]);          // "bytes=-500" = last 500
+  const end = m[1] !== '' && m[2] !== '' ? Math.min(Number(m[2]), size - 1) : size - 1;
+  if (start >= size || start > end) return new Response(null, { status: 416, headers: { 'content-range': `bytes */${size}` } });
+  const headers = new Headers(res.headers);
+  headers.set('accept-ranges', 'bytes');
+  headers.set('content-range', `bytes ${start}-${end}/${size}`);
+  headers.set('content-length', String(end - start + 1));
+  return new Response(buf.slice(start, end + 1), { status: 206, headers });
+}
 
 async function saveRsvp(request, env) {
   let f;
