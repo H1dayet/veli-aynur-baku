@@ -13,7 +13,7 @@
 <meta property="og:title" content="Vəli &amp; Aynur · Toy dəvətnaməsi · Свадебное приглашение">
 <meta property="og:description" content="19.12.2026, 18:00 · JW Marriott Absheron, Şərq zalı. Sizi toyumuza dəvət edirik · Приглашаем вас на нашу свадьбу.">
 <meta property="og:url" content="https://huselabs.az/veli-aynur-baku/">
-<meta property="og:image" content="https://huselabs.az/veli-aynur-baku/assets/og-3.jpg">
+<meta property="og:image" content="https://huselabs.az/veli-aynur-baku/assets/og-4.jpg">
 <meta property="og:image:type" content="image/jpeg">
 <meta property="og:image:width" content="1800">
 <meta property="og:image:height" content="945">
@@ -25,7 +25,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Forum&display=swap" rel="stylesheet">
 <link rel="preload" as="image" href="assets/cover.webp">
 <link rel="preload" as="image" href="assets/hero.webp">
-<link rel="stylesheet" href="style.css?v=6"><!-- bump ?v= on every change so phones skip their cached copy -->
+<link rel="stylesheet" href="style.css?v=7"><!-- bump ?v= on every change so phones skip their cached copy -->
 
 <script>
 // ===== EDIT ONLY THIS BLOCK =====
@@ -150,10 +150,8 @@ const CONFIG = {
 <!-- ===== Step 2, cover: a frosted window; the frost melts and the candlelit blossom tunnel shows through ===== -->
 <div class="gate" id="gate">
   <img class="gate-room" src="assets/cover.webp" alt="">
-  <div class="frost" aria-hidden="true">
-    <img class="branch branch-l" src="assets/branch-l.webp" alt="">
-    <img class="branch branch-r" src="assets/branch-r.webp" alt="">
-  </div>
+  <div class="frost" aria-hidden="true"></div>
+  <img class="branch" src="assets/branch-frame.webp" alt=""><!-- outside .frost: inside it the white would paint over the tunnel instead of blending away -->
   <div class="cover">
     <p class="cover-kicker" data-t="closingKicker"></p>
     <h1 class="cover-names"><span data-t="groom"></span><i>&amp;</i><span data-t="bride"></span></h1>
@@ -278,6 +276,6 @@ const CONFIG = {
 </button>
 <audio id="audio" preload="none"></audio>
 
-<script src="script.js?v=6"></script>
+<script src="script.js?v=7"></script>
 </body>
 </html>

@@ -49,25 +49,16 @@ img { display: block; max-width: 100%; }
   transition: --melt 2.2s cubic-bezier(.55, 0, .35, 1) .25s;
 }
 .open .frost { --melt: 130%; }
-/* Branches are on pure white, so multiply drops the white and keeps the branches on the frost.
-   object-fit: cover on a narrow box keeps only the outer (branch) side of each image.
-   ponytail: asymmetry by cropping (long branch top-left, short one bottom-right) until a one-piece asymmetric frame image arrives */
+/* One asymmetric frame (big branch top-left, small sprig bottom-right) on pure white:
+   multiply drops the white and keeps only the branches on the frost. */
 .branch {
-  position: absolute; object-fit: cover;
-  mix-blend-mode: multiply; opacity: .9; pointer-events: none;
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+  mix-blend-mode: multiply; opacity: .92; pointer-events: none;
+  transition: opacity 1.2s .3s;
 }
-.branch-l {
-  left: 0; top: 0; height: 84%; width: min(40vw, 290px); object-position: 0 0;
-  -webkit-mask: linear-gradient(90deg, #000 45%, transparent), linear-gradient(#000 62%, transparent);
-  mask: linear-gradient(90deg, #000 45%, transparent), linear-gradient(#000 62%, transparent);
-  -webkit-mask-composite: source-in; mask-composite: intersect;   /* after the shorthand, which resets it */
-}
-.branch-r {
-  right: 0; bottom: 0; height: 52%; width: min(30vw, 220px); object-position: 100% 100%;
-  -webkit-mask: linear-gradient(270deg, #000 45%, transparent), linear-gradient(0deg, #000 55%, transparent);
-  mask: linear-gradient(270deg, #000 45%, transparent), linear-gradient(0deg, #000 55%, transparent);
-  -webkit-mask-composite: source-in; mask-composite: intersect;
-}
+.open .branch { opacity: 0; }
+/* phones are narrower than the 9:16 image: squeeze it a little instead of cropping off the side branches */
+@media (max-aspect-ratio: 9/16) { .branch { object-fit: fill; } }
 
 .cover {
   position: absolute; inset: 0; z-index: 2;
@@ -135,35 +126,45 @@ img { display: block; max-width: 100%; }
 /* ===== Hero ===== */
 .hero { position: relative; height: 100svh; min-height: 560px; overflow: hidden; background: var(--ivory); }
 .hero-img {
-  /* the whole couple stays visible: the photo sits above the names (no white over it), trimming sky first on short screens */
-  position: absolute; inset: 0 0 auto; width: 100%; height: min(150vw, calc(100svh - 290px));
-  object-fit: cover; object-position: 50% 100%; transform-origin: 50% 60%;
-  -webkit-mask: linear-gradient(#000 93%, transparent); mask: linear-gradient(#000 93%, transparent);
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; object-position: 50% 40%; transform-origin: 50% 30%;
   transform: scale(1.12); transition: transform 3.2s var(--ease);
 }
 .hero::after {
   content: ''; position: absolute; inset: 0; z-index: 1;
-  background: linear-gradient(rgba(246, 242, 236, .25), transparent 12%);   /* only a faint veil at the very top */
+  /* same place as before, much lighter: the couple shows through and the white only gently fades in */
+  background: linear-gradient(rgba(246, 242, 236, .25), transparent 12%, transparent 48%,
+    rgba(246, 242, 236, .18) 58%, rgba(246, 242, 236, .42) 70%, rgba(246, 242, 236, .62) 84%, rgba(246, 242, 236, .78));
   pointer-events: none;
 }
 .revealing .hero-img, body:not(.locked) .hero-img { transform: none; }
 .hero-text {
-  position: absolute; inset: auto 0 calc(5svh + 44px); z-index: 3; text-align: center;
+  position: absolute; inset: auto 0 12svh; z-index: 3; text-align: center;
   opacity: 0; transform: translateY(24px); transition: opacity 1.4s 1.2s, transform 1.6s var(--ease) 1.2s;
 }
 .revealing .hero-text, body:not(.locked) .hero-text { opacity: 1; transform: none; }
-.kicker { margin-bottom: 12px; }
-.names { font-size: clamp(2.5rem, 11.5vw, 4.4rem); }
+.kicker { margin-bottom: 16px; }
+.names { font-size: clamp(2.8rem, 13vw, 4.8rem); }
+/* text over the photo: a soft ivory halo behind the block, a glow on the letters, deeper colours */
+.hero-text::before {
+  content: ''; position: absolute; inset: -14% -6%; z-index: -1; pointer-events: none;
+  background: radial-gradient(closest-side, rgba(250, 247, 242, .62), rgba(250, 247, 242, .3) 60%, transparent);
+}
+.hero-text, .scroll-hint { text-shadow: 0 0 10px rgba(255, 253, 249, .95), 0 0 24px rgba(255, 253, 249, .8); }
+.hero-text .names { color: var(--taupe-deep); }
+.hero-text .kicker { color: #7d6547; font-weight: 600; }
+.hero-text .hero-date { color: var(--taupe-deep); }
+.scroll-hint { color: var(--taupe) !important; }
 .hero-date { margin-top: 12px; font-style: italic; font-size: 1.15rem; color: var(--taupe); }
 .scroll-hint {
-  position: absolute; left: 0; right: 0; bottom: calc(4svh + 10px); z-index: 3; text-align: center;
+  position: absolute; left: 0; right: 0; bottom: calc(6svh + 10px); z-index: 3; text-align: center;
   font: .72rem var(--display); letter-spacing: .3em; padding-left: .3em; text-transform: uppercase; color: var(--muted);
   opacity: 0; transition: opacity 1.2s 2.4s;
 }
 .revealing .scroll-hint, body:not(.locked) .scroll-hint { opacity: 1; animation: bob 2.2s ease-in-out 3.6s infinite; }
 @keyframes bob { 50% { transform: translateY(4px); } }
 .scroll-line {
-  position: absolute; left: 50%; bottom: 0; z-index: 3; width: 1px; height: 4svh;
+  position: absolute; left: 50%; bottom: 0; z-index: 3; width: 1px; height: 6svh;
   background: linear-gradient(transparent, var(--champagne));
   animation: drip 2.2s ease-in-out infinite;
 }
