@@ -282,6 +282,16 @@ section { text-align: center; }
 
 footer { background: var(--cream); color: var(--muted); text-align: center; padding: 22px; font-family: var(--display); letter-spacing: .24em; font-size: .85rem; }
 
+/* ===== Organizer ===== */
+.org { padding: 64px 24px 72px; background: var(--ivory); }
+.org > * { max-width: 420px; margin-inline: auto; }
+.org-text { font-style: italic; font-size: 1.25rem; line-height: 1.55; color: var(--taupe); margin-top: -8px; }
+.org-label { margin-top: 34px; font: .74rem var(--display); letter-spacing: .3em; padding-left: .3em; text-transform: uppercase; color: var(--champagne-deep); }
+.org-name { margin-top: 6px; font: 2rem var(--display); letter-spacing: .1em; color: var(--taupe-deep); }
+.org-ask { margin-top: 14px; font-style: italic; color: var(--muted); }
+.org-phone { display: inline-block; margin-top: 4px; font: 1.4rem var(--display); letter-spacing: .08em; color: var(--taupe-deep); text-decoration: none; border-bottom: 1px solid var(--champagne); }
+.org .btn { display: block; width: fit-content; margin-top: 24px; }
+
 /* ===== Music ===== */
 .music {
   position: fixed; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom)); z-index: 60;

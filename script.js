@@ -30,6 +30,14 @@ const L = {
     long: (w, d, m, yr) => `${d} ${m} ${yr}, ${w}`,
     unit: (k) => ({ d: 'gün', h: 'saat', m: 'dəqiqə', s: 'saniyə' })[k],   // Azerbaijani nouns don't change after numbers
   },
+  tr: {
+    weekdays: ['Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi'],
+    wd: ['Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt', 'Paz'],
+    month: ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'],
+    get monthNom() { return this.month; },
+    long: (w, d, m, yr) => `${d} ${m} ${yr}, ${w}`,
+    unit: (k) => ({ d: 'gün', h: 'saat', m: 'dakika', s: 'saniye' })[k],   // no plural after numbers in Turkish either
+  },
 };
 
 let lang = 'az';

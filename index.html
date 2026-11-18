@@ -25,13 +25,13 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Forum&display=swap" rel="stylesheet">
 <link rel="preload" as="image" href="assets/cover.webp">
 <link rel="preload" as="image" href="assets/hero.webp">
-<link rel="stylesheet" href="style.css?v=8"><!-- bump ?v= on every change so phones skip their cached copy -->
+<link rel="stylesheet" href="style.css?v=9"><!-- bump ?v= on every change so phones skip their cached copy -->
 
 <script>
 // ===== EDIT ONLY THIS BLOCK =====
-// Guests pick Azərbaycanca or Русский on the cover; every text below exists in both languages.
+// Guests pick Azərbaycanca, Русский or Türkçe first; every text below exists in all three languages.
 const CONFIG = {
-  names: { az: ['Vəli', 'Aynur'], ru: ['Вели', 'Айнур'] },
+  names: { az: ['Vəli', 'Aynur'], ru: ['Вели', 'Айнур'], tr: ['Veli', 'Aynur'] },
   date: '2026-12-19T18:00:00+04:00',   // ISO, with Baku's offset
   timeZone: 'Asia/Baku',
   mapQuery: 'JW Marriott Absheron Baku',  // Google Maps search text; '' hides the map
@@ -84,6 +84,11 @@ const CONFIG = {
       altHero: 'Vəli və Aynur Ortaköy məscidinin yanında, sahildə',
       alt1: 'Vəli və Aynur Bosfor sahilində əl-ələ',
       alt2: 'Aynur Vəlinin əlindən tutaraq geri baxır',
+      orgTitle: 'İdeya və arzular',
+      orgText: 'Bəy və gəlin üçün sürpriz hazırlamaq və ya bayrama xüsusi bir an əlavə etmək istəyirsiniz? Aliyevents komandası hər şeyi təşkil etməyə kömək etmək və hər detalın qayğısına qalmaq üçün həmişə yanınızdadır.',
+      orgLabel: 'Təşkilatçı',
+      orgAsk: 'Bütün suallar üçün zəng edin və ya yazın',
+      orgWa: 'WhatsApp-da yazın',
     },
     ru: {
       pageTitle: 'Вели & Айнур · Свадебное приглашение',
@@ -130,6 +135,62 @@ const CONFIG = {
       altHero: 'Вели и Айнур на набережной у мечети Ортакёй',
       alt1: 'Вели и Айнур держатся за руки на набережной Босфора',
       alt2: 'Айнур оборачивается, держа Вели за руку',
+      orgTitle: 'Идеи и пожелания',
+      orgText: 'Хотите подготовить сюрприз для молодожёнов или сделать особенный момент частью праздника? Команда Aliyevents всегда рядом, чтобы помочь вам всё организовать и позаботиться о каждой детали.',
+      orgLabel: 'Организатор',
+      orgAsk: 'По любым вопросам звоните или пишите',
+      orgWa: 'Написать в WhatsApp',
+    },
+    tr: {
+      pageTitle: 'Veli & Aynur · Düğün davetiyesi',
+      heroKicker: 'Düğün davetiyesi',
+      scroll: 'Aşağı kaydırın',
+      coverHello: 'Sevgili misafirimiz',
+      coverInvite: 'sizi düğünümüzde görmekten mutluluk duyarız',
+      coverOpen: 'Davetiyeyi aç',
+      greeting: 'Bir kış akşamı, mum ışığı ve müzik eşliğinde ailemizin hikâyesi başlıyor. Bu mutlu anı sizinle paylaşmak istiyoruz.',
+      caption1: 'Hikâyemizin başlangıcı',
+      dateTitle: 'Tarihi not edin',
+      venueTitle: 'Yer ve saat',
+      events: [{ title: 'Düğün töreni', time: '18:00', place: 'JW Marriott Absheron', address: 'Azadlıq, 674 · Şərq salonu, 3. kat' }],
+      mapTitle: 'Mekân haritası',
+      directions: 'Yol tarifi al',
+      programTitle: 'Akşamın programı',
+      program: [],
+      caption2: 'Sizi kutlamamızda bekliyoruz',
+      closingKicker: 'Kış senfonisi',
+      closingTag: 'İki kültürün masalı',
+      closing: 'Bu akşam yanımızda olmanız bizim için en değerli hediye. Kış masalımızda sizi bekliyoruz!',
+      married: 'Artık bir aileyiz! Bu günü bizimle paylaştığınız için teşekkür ederiz.',
+      rsvpTitle: 'Bizimle olacak mısınız?',
+      rsvpLead: 'Lütfen birkaç kısa soruyu yanıtlayın — böylece kutlamayı her misafir için özenle hazırlayabiliriz.',
+      fName: 'Adınız ve soyadınız',
+      fAttend: 'Törene katılabilecek misiniz?',
+      fYes: 'Evet, memnuniyetle',
+      fNo: 'Maalesef katılamayacağım',
+      fGuests: 'Sizinle birlikte kaç kişi olacak?',
+      fComment: 'Bize birkaç söz',
+      fOptional: '(isteğe bağlı)',
+      fPlaceholder: 'Soru, dilek ya da güzel bir söz',
+      fSubmit: 'Yanıtı gönder',
+      fSending: 'Gönderiliyor…',
+      errName: 'Lütfen adınızı yazın.',
+      errChoice: 'Katılıp katılamayacağınızı işaretleyin.',
+      errNet: 'Yanıt gönderilemedi. İnternet bağlantınızı kontrol edip tekrar deneyin.',
+      thanksYes: '{name}, teşekkür ederiz! Yanıtınızı aldık — 19 Aralık’ta görüşmek üzere.',
+      thanksNo: '{name}, haber verdiğiniz için teşekkürler. Sizi özleyeceğiz!',
+      fEdit: 'Yanıtı değiştir',
+      nudge: 'Davete yanıt ver',
+      musicOff: 'Müziği kapat',
+      musicOn: 'Müziği aç',
+      altHero: 'Veli ve Aynur, Ortaköy Camii yakınında sahilde',
+      alt1: 'Veli ve Aynur Boğaz kıyısında el ele',
+      alt2: 'Aynur, Veli’nin elini tutarak geriye bakıyor',
+      orgTitle: 'Fikir ve dilekler',
+      orgText: 'Gelin ve damada bir sürpriz hazırlamak ya da kutlamaya özel bir an katmak ister misiniz? Aliyevents ekibi her şeyi organize etmenize yardımcı olmak ve her ayrıntıyı düşünmek için her zaman yanınızda.',
+      orgLabel: 'Organizatör',
+      orgAsk: 'Tüm sorularınız için arayın ya da yazın',
+      orgWa: 'WhatsApp’tan yazın',
     },
   },
 };
@@ -140,10 +201,11 @@ const CONFIG = {
 <!-- ===== Step 1: language choice (its own simple screen) ===== -->
 <div class="lang-screen" id="langScreen">
   <p class="star" aria-hidden="true">✦</p>
-  <p class="ls-title"><span lang="az">Dili seçin</span><span lang="ru">Выберите язык</span></p>
+  <p class="ls-title"><span lang="az">Dili seçin</span><span lang="ru">Выберите язык</span><span lang="tr">Dil seçiniz</span></p>
   <div class="langs">
     <button class="btn" data-lang="az" lang="az">Azərbaycanca</button>
     <button class="btn" data-lang="ru" lang="ru">Русский</button>
+    <button class="btn" data-lang="tr" lang="tr">Türkçe</button>
   </div>
 </div>
 
@@ -267,6 +329,17 @@ const CONFIG = {
       <button class="rsvp-edit" type="button" id="rsvpEdit" data-t="fEdit"></button>
     </div>
   </section>
+
+  <!-- Organizer: who to call about surprises and special moments -->
+  <section class="org">
+    <h2 class="title" data-t="orgTitle"></h2>
+    <p class="org-text" data-t="orgText"></p>
+    <p class="org-label" data-t="orgLabel"></p>
+    <p class="org-name">Aliyevents</p>
+    <p class="org-ask" data-t="orgAsk"></p>
+    <a class="org-phone" href="tel:+994502446610">+994 50 244 66 10</a>
+    <a class="btn" href="https://wa.me/994502446610" target="_blank" rel="noopener" data-t="orgWa"></a>
+  </section>
   <footer><span data-t="initials"></span> · <span data-t="dateDots"></span></footer>
 </main>
 
@@ -276,6 +349,6 @@ const CONFIG = {
 </button>
 <audio id="audio" preload="none"></audio>
 
-<script src="script.js?v=8"></script>
+<script src="script.js?v=9"></script>
 </body>
 </html>
