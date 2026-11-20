@@ -190,7 +190,7 @@ const io = new IntersectionObserver((es) => es.filter((e) => e.isIntersecting).f
   e.target.classList.add('in');
   io.unobserve(e.target);
 }), { threshold: 0.25, rootMargin: '0px 0px -8% 0px' });
-document.querySelectorAll('.greeting, .frame, .date, .venue, .program, .closing').forEach((el) => io.observe(el));
+document.querySelectorAll('.greeting, .frame, .date, .venue, .program, .photos, .closing').forEach((el) => io.observe(el));
 
 // ---- Countdown ----
 let timer;

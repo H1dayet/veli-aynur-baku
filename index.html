@@ -25,7 +25,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Forum&display=swap" rel="stylesheet">
 <link rel="preload" as="image" href="assets/cover.webp">
 <link rel="preload" as="image" href="assets/hero.webp">
-<link rel="stylesheet" href="style.css?v=9"><!-- bump ?v= on every change so phones skip their cached copy -->
+<link rel="stylesheet" href="style.css?v=10"><!-- bump ?v= on every change so phones skip their cached copy -->
 
 <script>
 // ===== EDIT ONLY THIS BLOCK =====
@@ -84,6 +84,10 @@ const CONFIG = {
       altHero: 'Vəli və Aynur Ortaköy məscidinin yanında, sahildə',
       alt1: 'Vəli və Aynur Bosfor sahilində əl-ələ',
       alt2: 'Aynur Vəlinin əlindən tutaraq geri baxır',
+      photosTitle: 'Foto və video',
+      photosSub: 'Axşam sizin gözünüzlə',
+      photosText: 'Toyumuzun foto və videolarını bir yerə toplamaq üçün Telegram-da ümumi çat yaratdıq. Kadrları elə həmin axşam və ya bayramdan sonra paylaşın. Bu günü sizin gözünüzlə görmək istəyirik: tutulan təbəssümləri, rəqsləri və bizim gözümüzdən qaça biləcək kiçik anları.',
+      photosBtn: 'Toy çatına keçin',
       orgTitle: 'İdeya və arzular',
       orgText: 'Bəy və gəlin üçün sürpriz hazırlamaq və ya bayrama xüsusi bir an əlavə etmək istəyirsiniz? Aliyevents komandası hər şeyi təşkil etməyə kömək etmək və hər detalın qayğısına qalmaq üçün həmişə yanınızdadır.',
       orgLabel: 'Təşkilatçı',
@@ -135,6 +139,10 @@ const CONFIG = {
       altHero: 'Вели и Айнур на набережной у мечети Ортакёй',
       alt1: 'Вели и Айнур держатся за руки на набережной Босфора',
       alt2: 'Айнур оборачивается, держа Вели за руку',
+      photosTitle: 'Фото и видео',
+      photosSub: 'Вечер вашими глазами',
+      photosText: 'Мы создали общий чат в Telegram, чтобы собрать фотографии и видео с нашей свадьбы. Делитесь кадрами прямо в этот вечер или после праздника. Нам очень хочется увидеть этот день вашими глазами: пойманные улыбки, танцы и маленькие моменты, которые мы могли пропустить.',
+      photosBtn: 'Перейти в свадебный чат',
       orgTitle: 'Идеи и пожелания',
       orgText: 'Хотите подготовить сюрприз для молодожёнов или сделать особенный момент частью праздника? Команда Aliyevents всегда рядом, чтобы помочь вам всё организовать и позаботиться о каждой детали.',
       orgLabel: 'Организатор',
@@ -186,6 +194,10 @@ const CONFIG = {
       altHero: 'Veli ve Aynur, Ortaköy Camii yakınında sahilde',
       alt1: 'Veli ve Aynur Boğaz kıyısında el ele',
       alt2: 'Aynur, Veli’nin elini tutarak geriye bakıyor',
+      photosTitle: 'Fotoğraf ve video',
+      photosSub: 'Akşam sizin gözünüzden',
+      photosText: 'Düğünümüzün fotoğraf ve videolarını bir araya toplamak için Telegram’da ortak bir sohbet oluşturduk. Kareleri o akşam ya da kutlamadan sonra paylaşın. Bu günü sizin gözünüzden görmeyi çok istiyoruz: yakalanan gülümsemeler, danslar ve bizim kaçırmış olabileceğimiz küçük anlar.',
+      photosBtn: 'Düğün sohbetine katıl',
       orgTitle: 'Fikir ve dilekler',
       orgText: 'Gelin ve damada bir sürpriz hazırlamak ya da kutlamaya özel bir an katmak ister misiniz? Aliyevents ekibi her şeyi organize etmenize yardımcı olmak ve her ayrıntıyı düşünmek için her zaman yanınızda.',
       orgLabel: 'Organizatör',
@@ -278,6 +290,14 @@ const CONFIG = {
       <ol class="timeline" id="program"></ol>
     </section>
 
+    <!-- Shared Telegram chat for guests' photos and videos -->
+    <section class="photos">
+      <h2 class="title" data-t="photosTitle"></h2>
+      <p class="photos-sub" data-t="photosSub"></p>
+      <p class="photos-text" data-t="photosText"></p>
+      <a class="btn dark" href="https://t.me/+pKS500ctUyZmYmQy" target="_blank" rel="noopener" data-t="photosBtn"></a>
+    </section>
+
     <figure class="frame tilt-r">
       <img src="assets/photo-2.webp" alt="" data-alt="alt2" loading="lazy" width="900" height="1350">
       <figcaption data-t="caption2"></figcaption>
@@ -349,6 +369,6 @@ const CONFIG = {
 </button>
 <audio id="audio" preload="none"></audio>
 
-<script src="script.js?v=9"></script>
+<script src="script.js?v=10"></script>
 </body>
 </html>
