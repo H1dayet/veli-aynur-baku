@@ -310,6 +310,7 @@ footer { background: var(--cream); color: var(--muted); text-align: center; padd
 /* ===== RSVP ===== */
 .rsvp { padding: 64px 24px 72px; text-align: center; scroll-margin-top: 12px; background: var(--cream); }
 .rsvp > * { max-width: 420px; margin-inline: auto; }
+.rsvp-by { margin: -12px auto 30px; font-size: 1.25rem; font-weight: 600; line-height: 1.4; color: var(--taupe-deep); }
 .rsvp-lead { font-style: italic; font-size: 1.2rem; line-height: 1.5; margin: -8px auto 28px; color: var(--taupe); }
 #rsvpForm { display: grid; gap: 20px; text-align: left; }
 #rsvpForm[hidden] { display: none; }

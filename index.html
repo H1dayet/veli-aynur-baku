@@ -25,7 +25,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Forum&display=swap" rel="stylesheet">
 <link rel="preload" as="image" href="assets/cover.webp">
 <link rel="preload" as="image" href="assets/hero.webp">
-<link rel="stylesheet" href="style.css?v=10"><!-- bump ?v= on every change so phones skip their cached copy -->
+<link rel="stylesheet" href="style.css?v=11"><!-- bump ?v= on every change so phones skip their cached copy -->
 
 <script>
 // ===== EDIT ONLY THIS BLOCK =====
@@ -62,6 +62,7 @@ const CONFIG = {
       married: 'Artıq biz bir ailəyik! Bu günü bizimlə bölüşdüyünüz üçün minnətdarıq.',
       rsvpTitle: 'Bizimlə olacaqsınız?',
       rsvpLead: 'Zəhmət olmasa, bir neçə qısa suala cavab verin — bu, bayramı hər qonaq üçün düşünülmüş şəkildə hazırlamağa kömək edəcək.',
+      rsvpBy: 'Zəhmət olmasa, iştirakınızı 10 dekabradək təsdiqləyin.',
       fName: 'Adınız və soyadınız',
       fAttend: 'Mərasimə gələ biləcəksiniz?',
       fYes: 'Bəli, məmnuniyyətlə',
@@ -117,6 +118,7 @@ const CONFIG = {
       married: 'Теперь мы семья! Спасибо, что были рядом в этот день.',
       rsvpTitle: 'Будете с нами?',
       rsvpLead: 'Ответьте, пожалуйста, на пару коротких вопросов — так мы сможем продумать праздник для каждого гостя.',
+      rsvpBy: 'Пожалуйста, подтвердите своё присутствие до 10 декабря.',
       fName: 'Как вас зовут (имя и фамилия)',
       fAttend: 'Придёте на торжество?',
       fYes: 'Конечно, приду',
@@ -172,6 +174,7 @@ const CONFIG = {
       married: 'Artık bir aileyiz! Bu günü bizimle paylaştığınız için teşekkür ederiz.',
       rsvpTitle: 'Bizimle olacak mısınız?',
       rsvpLead: 'Lütfen birkaç kısa soruyu yanıtlayın — böylece kutlamayı her misafir için özenle hazırlayabiliriz.',
+      rsvpBy: 'Lütfen katılımınızı 10 Aralık’a kadar bildirin.',
       fName: 'Adınız ve soyadınız',
       fAttend: 'Törene katılabilecek misiniz?',
       fYes: 'Evet, memnuniyetle',
@@ -317,6 +320,7 @@ const CONFIG = {
   <section class="rsvp" id="rsvp">
     <h2 class="title" data-t="rsvpTitle"></h2>
     <p class="rsvp-lead" data-t="rsvpLead"></p>
+    <p class="rsvp-by" data-t="rsvpBy"></p>
     <form id="rsvpForm" novalidate>
       <label class="field">
         <span data-t="fName"></span>
@@ -369,6 +373,6 @@ const CONFIG = {
 </button>
 <audio id="audio" preload="none"></audio>
 
-<script src="script.js?v=10"></script>
+<script src="script.js?v=11"></script>
 </body>
 </html>
